@@ -7,3 +7,14 @@
 //     driver: Database,
 //   });
 // }
+
+import {accountService} from './account'
+
+export async function getDBService(name) {
+    switch (name) {
+        case 'account':
+          return handleAccount;
+        default:
+          return null;
+      }
+}
