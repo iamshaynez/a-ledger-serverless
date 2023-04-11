@@ -1,3 +1,8 @@
 name = "a-ledger-serverless"
-main = "src/index.js"
+main = "src/worker.js"
 compatibility_date = "2023-04-11"
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "aledger"
+database_id = "0a88db4d-63bb-4482-91c1-aa7df5904bab"

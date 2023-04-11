@@ -1,4 +1,4 @@
-import { json, text } from 'co-body';
+
 
 export async function handleAccount(request, db) {
     const { method } = request;
@@ -26,7 +26,7 @@ async function getAccounts(db) {
 }
   
 async function createAccount(request, db) {
-    const requestBody = await json(request);
+    const requestBody = await request.json();
     const { username, email, password } = requestBody;
   
     if (!username || !email || !password) {
