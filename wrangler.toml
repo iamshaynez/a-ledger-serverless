@@ -1,0 +1,3 @@
+name = "a-ledger-serverless"
+main = "src/index.js"
+compatibility_date = "2023-04-11"
