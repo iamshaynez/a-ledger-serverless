@@ -10,6 +10,10 @@ export function createResponse(code, data, meta, success, message) {
   });
 }
 
+export function createErrorResponse(code, message) {
+  return createResponse(code, [], {}, false, message)
+}
+
 export function createResponseFromResultSet(resultset) {
   const jsonResponse = {
     data: resultset["data"],

@@ -5,3 +5,7 @@ export function createResultSet(data, meta, success, message) {
   console.log(set)
   return set;
 }
+
+export function createError(message) {
+    return {"data": [], "meta": {}, "success": false, "message": message}
+}
