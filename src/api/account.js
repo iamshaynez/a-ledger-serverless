@@ -1,5 +1,7 @@
 import { accountService } from "../database/account";
+import { createResponseFromResultSet } from "./apiHelper";
 
+// handles with URI start with /api/accounts
 export async function handleAccount(request, env) {
   const { method } = request;
 
@@ -20,29 +22,17 @@ export async function handleAccount(request, env) {
 async function getAccounts(env) {
   const service = new accountService(env);
 
-  const res = await service.listAccounts();
-
-  return new Response(res, {
-    headers: { "Content-Type": "application/json" },
-  });
+  const resultset = await service.listAccounts();
+  
+  return createResponseFromResultSet(resultset);
 }
 
 async function createAccount(request, env) {
-  // const requestBody = await request.json();
-  // const { username, email, password } = requestBody;
-  // if (!username || !email || !password) {
-  //   return new Response('Missing required fields', { status: 400 });
-  // }
-  // const created_at = new Date().toISOString();
-  // try {
-  //   await db.run(
-  //     'INSERT INTO account (username, email, password, created_at) VALUES (?, ?, ?, ?)',
-  //     [username, email, password, created_at]
-  //   );
-  // } catch (error) {
-  //   return new Response('Error creating account', { status: 500 });
-  // }
-  // return new Response('Account created', { status: 201 });
+  const service = new accountService(env);
+  const requestBody = await request.json();
+  const info = await service.createAccount(requestBody)
+  
+  return new Response('Account created', { status: 201 });
 }
 
 async function updateAccount(request, env) {
