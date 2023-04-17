@@ -8,7 +8,7 @@ export class accountService {
 
   async listAccounts() {
     try {
-      const result = await this.db.prepare("SELECT * FROM account").all();
+      const result = await this.db.prepare("SELECT * FROM v_account_total").all();
       return createResultSet(
         result["results"],
         result["meta"],
@@ -23,7 +23,7 @@ export class accountService {
   async getAccount(id) {
     try {
       const result = await this.db
-        .prepare("SELECT * FROM account WHERE id = ?1")
+        .prepare("SELECT * FROM v_account_total WHERE id = ?1")
         .bind(id)
         .all();
 
@@ -46,7 +46,7 @@ export class accountService {
     const {
       id,
       account_name,
-      account_type,
+      account_desc,
       account_status,
       start_balance,
       recon_date,
@@ -63,7 +63,7 @@ export class accountService {
     const existingAccount = resultset.data[0];
 
     const updated_account_name = account_name || existingAccount.account_name;
-    const updated_account_type = account_type || existingAccount.account_type;
+    const updated_account_desc = account_desc || existingAccount.account_desc;
     const updated_account_status =
       account_status || existingAccount.account_status;
     const updated_start_balance =
@@ -73,11 +73,11 @@ export class accountService {
     try {
       const info = await this.db
         .prepare(
-          "UPDATE account SET account_name=?1, account_type=?2, account_status=?3, start_balance=?4, recon_date=?5 WHERE id = ?6"
+          "UPDATE account SET account_name=?1, account_desc=?2, account_status=?3, start_balance=?4, recon_date=?5 WHERE id = ?6"
         )
         .bind(
           updated_account_name,
-          updated_account_type,
+          updated_account_desc,
           updated_account_status,
           updated_start_balance,
           updated_recon_date,
@@ -117,10 +117,10 @@ export class accountService {
   }
 
   async createAccount(requestBody) {
-    const { account_name, account_type, account_status, start_balance } =
+    const { account_name, account_desc, account_type, account_status, start_balance, account_currency } =
       requestBody;
 
-    if (!account_name || !account_type || !account_status || !start_balance) {
+    if (!account_name || !account_type || !account_status || !start_balance || !account_currency) {
       return createError("Missing required fields...");
     }
 
@@ -130,13 +130,15 @@ export class accountService {
     try {
       const info = await this.db
         .prepare(
-          "INSERT INTO account (account_name, account_type, account_status, start_balance, created_date, recon_date) VALUES (?1, ?2, ?3, ?4, ?5, ?6)"
+          "INSERT INTO account (account_name, account_desc, account_type, account_status, start_balance, account_currency, created_date, recon_date) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)"
         )
         .bind(
           account_name,
+          account_desc,
           account_type,
           account_status,
           start_balance,
+          account_currency,
           created_date,
           recon_date
         )
